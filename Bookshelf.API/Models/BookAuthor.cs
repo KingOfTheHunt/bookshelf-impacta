@@ -1,5 +1,8 @@
-﻿namespace Bookshelf.API.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace Bookshelf.API.Models;
+
+[Table("BookAuthor")]
 public class BookAuthor
 {
     public int BookId { get; set; }
