@@ -5,17 +5,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshelf.API.Controllers;
 
-[Route("v1/reader/")]
+[Route("v1/account/")]
 [ApiController]
-public class ReaderController : ControllerBase
+public class AccountController : ControllerBase
 {
-    [HttpPost("sing-up")]
-    public async Task<IActionResult> SingUp([FromServices] BookshelfDbContext context,
+    [HttpPost("sign-up")]
+    public async Task<IActionResult> SignUp([FromServices] BookshelfDbContext context,
         [FromBody] CreateReaderViewModel readerViewModel,
         [FromServices] ReaderRepository readerRepository)
     {
         var reader = await readerRepository.Insert(context, readerViewModel);
 
-        return Created("", reader);
+        return Created("", new { name = reader.Name, userName = reader.UserName });
+    }
+
+    [HttpPost("sign-in")]
+    public async Task<IActionResult> SignIn()
+    {
+        return Ok();
     }
 }
