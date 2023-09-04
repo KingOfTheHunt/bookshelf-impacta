@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Bookshelf.API.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bookshelf.API.Models;
 
@@ -9,7 +10,7 @@ public class Reading
     public Book Book { get; set; }
     public Reader Reader { get; set; }
     public short PagesRead { get; set; }
-    public int ReadingStatus { get; set; }
+    public EReadingStatus ReadingStatus { get; set; }
     public short Rate { get; set; }
     public string Review { get; set; }
 }
