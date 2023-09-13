@@ -29,8 +29,46 @@ public class AccountController : ControllerBase
         var reader = await readerRepository.GetReaderAsync(context, readerViewModel);
 
         if (reader == null)
-            return NotFound(new { message = "Usuário/senha incorreto(s)" });
+            return NotFound(new { message = "Usuário e/ou senha incorreto(s)" });
 
         return Ok(tokenService.GenerateToken(reader));
+    }
+
+    [HttpGet("{userName}")]
+    public async Task<IActionResult> GetUser([FromRoute] string userName,
+        [FromServices] ReaderRepository repository,
+        [FromServices] BookshelfDbContext context)
+    {
+        if (userName != User.Identity.Name)
+        {
+            return Forbid();
+        }
+
+        var reader = await repository.GetReaderAsync(context, userName);
+
+        if (reader == null)
+        {
+            return BadRequest(new { message = "Não foi encontrado nenhum leitor com este username." });
+        }
+
+        return Ok(new { reader.Name, reader.UserName, reader.Email, reader.Image });
+    }
+
+    [HttpPut("{userName}/change-password")]
+    public async Task<IActionResult> ChangePassword([FromServices] BookshelfDbContext context,
+        [FromBody] ChangePasswordReaderViewModel viewModel,
+        [FromServices] ReaderRepository repository)
+    {
+        if (User.Identity.IsAuthenticated == false)
+        {
+            return Forbid();
+        }
+
+        var result = await repository.UpdatePasswordReader(context, viewModel);
+
+        if (result == false)
+            return BadRequest("Houve um problema na hora de atualizar a senha.");
+
+        return Ok(new { message = "Atualizado com sucesso!" });
     }
 }
