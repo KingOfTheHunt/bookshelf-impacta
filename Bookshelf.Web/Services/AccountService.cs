@@ -37,4 +37,15 @@ public class AccountService
 
         return profileAccountViewModel;
     }
+
+    public async Task<bool> DeleteAccountAsync(string userName, string token)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+            token);
+
+        var response = await _httpClient.DeleteAsync($"v1/account/{userName}/delete");
+        response.EnsureSuccessStatusCode();
+
+        return response.StatusCode == System.Net.HttpStatusCode.OK;
+    }
 }

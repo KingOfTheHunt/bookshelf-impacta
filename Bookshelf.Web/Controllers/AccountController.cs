@@ -24,7 +24,7 @@ namespace Bookshelf.Web.Controllers
                 HttpContext.Session.SetString("token", token);
                 HttpContext.Session.SetString("userName", viewModel.Login);
 
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToAction(nameof(Profile));
             }
             catch (Exception)
             {
@@ -68,6 +68,30 @@ namespace Bookshelf.Web.Controllers
             catch (Exception)
             {
                 return BadRequest("Houve algum problema!");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string userName, 
+            [FromServices] AccountService accountService)
+        {
+            try
+            {
+                var result = await accountService.DeleteAccountAsync(userName, 
+                    HttpContext.Session.GetString("token"));
+
+                if (result)
+                {
+                    HttpContext.Session.Clear();
+
+                    return RedirectToAction(nameof(Index), "Home");
+                }
+
+                return BadRequest("Houve um problema na hora de deletar a conta.");
+            }
+            catch (Exception)
+            {
+                return BadRequest("Houve um problema na hora de deletar a conta.");
             }
         }
     }
