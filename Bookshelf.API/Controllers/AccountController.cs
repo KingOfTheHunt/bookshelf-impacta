@@ -2,6 +2,7 @@
 using Bookshelf.API.Repositories;
 using Bookshelf.API.Services;
 using Bookshelf.API.ViewModels.Reader;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshelf.API.Controllers;
@@ -34,6 +35,7 @@ public class AccountController : ControllerBase
         return Ok(tokenService.GenerateToken(reader));
     }
 
+    [Authorize]
     [HttpGet("{userName}")]
     public async Task<IActionResult> GetUser([FromRoute] string userName,
         [FromServices] ReaderRepository repository,
@@ -54,12 +56,14 @@ public class AccountController : ControllerBase
         return Ok(new { reader.Name, reader.UserName, reader.Email, reader.Image });
     }
 
+    [Authorize]
     [HttpPut("{userName}/change-password")]
-    public async Task<IActionResult> ChangePassword([FromServices] BookshelfDbContext context,
+    public async Task<IActionResult> ChangePassword([FromRoute] string userName,
+        [FromServices] BookshelfDbContext context,
         [FromBody] ChangePasswordReaderViewModel viewModel,
         [FromServices] ReaderRepository repository)
     {
-        if (User.Identity.IsAuthenticated == false)
+        if (User.Identity.Name == userName)
         {
             return Forbid();
         }
@@ -70,5 +74,12 @@ public class AccountController : ControllerBase
             return BadRequest("Houve um problema na hora de atualizar a senha.");
 
         return Ok(new { message = "Atualizado com sucesso!" });
+    }
+
+    [Authorize]
+    [HttpDelete("{userName}/delete")]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        return Ok();
     }
 }
