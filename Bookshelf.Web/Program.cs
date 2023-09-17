@@ -3,6 +3,8 @@ using Bookshelf.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Configuration.Api = builder.Configuration.GetValue<string>("Api");
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<AccountService>();
@@ -10,7 +12,13 @@ builder.Services.AddHttpClient<AccountService>(options =>
 {
     options.BaseAddress = new Uri(Configuration.Api);
 });
-Configuration.Api = builder.Configuration.GetValue<string>("Api");
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(2);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -28,6 +36,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

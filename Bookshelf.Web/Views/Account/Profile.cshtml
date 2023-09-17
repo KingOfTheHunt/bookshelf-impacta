@@ -1,0 +1,13 @@
+﻿@model Bookshelf.Web.ViewModels.Account.ProfileAccountViewModel;
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <img src="@Html.DisplayFor(model => model.Image)" alt="Imagem do usuário" class="img-fluid rounded-circle"
+                 height="100" width="100">
+            <h2>Nome: @Html.DisplayFor(model => model.Name)</h2>
+            <p>Nome de Usuário: @Html.DisplayFor(model => model.UserName)</p>
+            <p>Email: @Html.DisplayFor(model => model.Email)</p>
+        </div>
+    </div>
+</div>

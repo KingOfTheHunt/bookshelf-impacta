@@ -8,6 +8,9 @@ namespace Bookshelf.Web.Controllers
     {
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("token") != null)
+                return RedirectToAction(nameof(Index), "Home");
+
             return View();
         }
 
@@ -18,10 +21,14 @@ namespace Bookshelf.Web.Controllers
             try
             {
                 var token = await accountService.LoginAsync(viewModel);
+                HttpContext.Session.SetString("token", token);
+                HttpContext.Session.SetString("userName", viewModel.Login);
+
+                return RedirectToAction(nameof(Index), "Home");
             }
             catch (Exception)
             {
-                return BadRequest("Houve um problema na autenticação.");
+                return BadRequest("Houve um problema na hora de realizar o login.");
             }
         }
 
@@ -43,6 +50,24 @@ namespace Bookshelf.Web.Controllers
             catch (Exception)
             {
                 return BadRequest("Houve um problema na hora de cadastrar.");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile([FromServices] AccountService accountService)
+        {
+            if (HttpContext.Session.GetString("token") == null)
+                return RedirectToAction(nameof(Index));
+
+            try
+            {
+                var viewModel = await accountService.GetAccount(HttpContext.Session.GetString("userName"),
+                    HttpContext.Session.GetString("token"));
+                return View(viewModel);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Houve algum problema!");
             }
         }
     }
