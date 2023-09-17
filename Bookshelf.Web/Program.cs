@@ -1,9 +1,15 @@
 using Bookshelf.Web;
+using Bookshelf.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddHttpClient<AccountService>(options =>
+{
+    options.BaseAddress = new Uri(Configuration.Api);
+});
 Configuration.Api = builder.Configuration.GetValue<string>("Api");
 
 var app = builder.Build();
