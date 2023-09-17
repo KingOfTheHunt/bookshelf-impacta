@@ -78,8 +78,18 @@ public class AccountController : ControllerBase
 
     [Authorize]
     [HttpDelete("{userName}/delete")]
-    public async Task<IActionResult> DeleteAccount()
+    public async Task<IActionResult> DeleteAccount([FromRoute] string userName,
+        [FromServices] BookshelfDbContext context,
+        [FromServices] ReaderRepository repository)
     {
-        return Ok();
+        if (User.Identity.Name != userName)
+            return Forbid();
+        
+        var result = await repository.DeleteReaderAsync(context, userName);
+
+        if (result == false)
+            return BadRequest(new { message = "Houve um problema na hora de deletar a conta." });
+
+        return Ok(new { message = "Conta deletada com sucesso!" });
     }
 }

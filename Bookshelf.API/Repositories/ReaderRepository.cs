@@ -58,5 +58,18 @@ namespace Bookshelf.API.Repositories
 
             return true;
         }
+
+        public async Task<bool> DeleteReaderAsync([FromServices] BookshelfDbContext context, 
+            string userName)
+        {
+            var reader = await context.Readers.FirstOrDefaultAsync(x => x.UserName == userName);
+            
+            if (reader == null) return false;
+
+            context.Readers.Remove(reader);
+            await context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
