@@ -22,7 +22,7 @@ public class AccountService
     {
         var response = await _httpClient.PostAsJsonAsync("v1/account/sign-in", viewModel);
         response.EnsureSuccessStatusCode();
-        
+
         return await response.Content.ReadAsStringAsync();
     }
 
@@ -44,6 +44,20 @@ public class AccountService
             token);
 
         var response = await _httpClient.DeleteAsync($"v1/account/{userName}/delete");
+        response.EnsureSuccessStatusCode();
+
+        return response.StatusCode == System.Net.HttpStatusCode.OK;
+    }
+
+    public async Task<bool> UpdatePasswordAsync(ChangePassowordAccountViewModel viewModel,
+        string userName,
+        string token)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+           token);
+
+        var response = await _httpClient.PutAsJsonAsync($"v1/account/{userName}/change-password",
+            viewModel);
         response.EnsureSuccessStatusCode();
 
         return response.StatusCode == System.Net.HttpStatusCode.OK;

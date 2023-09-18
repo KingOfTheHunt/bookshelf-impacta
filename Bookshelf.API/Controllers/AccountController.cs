@@ -63,7 +63,7 @@ public class AccountController : ControllerBase
         [FromBody] ChangePasswordReaderViewModel viewModel,
         [FromServices] ReaderRepository repository)
     {
-        if (User.Identity.Name == userName)
+        if (User.Identity.Name != userName)
         {
             return Forbid();
         }

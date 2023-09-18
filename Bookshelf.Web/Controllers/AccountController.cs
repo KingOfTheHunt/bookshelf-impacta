@@ -72,27 +72,51 @@ namespace Bookshelf.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string userName, 
+        public async Task<IActionResult> Delete(string userName,
             [FromServices] AccountService accountService)
         {
             try
             {
-                var result = await accountService.DeleteAccountAsync(userName, 
+                var result = await accountService.DeleteAccountAsync(userName,
                     HttpContext.Session.GetString("token"));
+                HttpContext.Session.Clear();
 
-                if (result)
-                {
-                    HttpContext.Session.Clear();
-
-                    return RedirectToAction(nameof(Index), "Home");
-                }
-
-                return BadRequest("Houve um problema na hora de deletar a conta.");
+                return RedirectToAction(nameof(Index), "Home");
             }
             catch (Exception)
             {
                 return BadRequest("Houve um problema na hora de deletar a conta.");
             }
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword([FromServices] AccountService accountService,
+            ChangePassowordAccountViewModel viewModel)
+        {
+            try
+            {
+                viewModel.UserName = HttpContext.Session.GetString("userName");
+                await accountService.UpdatePasswordAsync(viewModel, viewModel.UserName,
+                    HttpContext.Session.GetString("token"));
+
+                return RedirectToAction(nameof(Profile));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Houve um problema na hora de atualizar a senha.");
+            }
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+
+            return RedirectToAction(nameof(Index), "Home");
         }
     }
 }
