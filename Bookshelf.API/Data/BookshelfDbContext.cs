@@ -1,4 +1,5 @@
-﻿using Bookshelf.API.Models;
+﻿using Bookshelf.API.Data.Mappings;
+using Bookshelf.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookshelf.API.Data;
@@ -16,5 +17,10 @@ public class BookshelfDbContext : DbContext
     public BookshelfDbContext(DbContextOptions<BookshelfDbContext> options)
         : base(options)
     {
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new BookMap());
     }
 }
