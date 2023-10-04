@@ -30,6 +30,7 @@ builder.Services.AddDbContext<BookshelfDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 builder.Services.AddScoped<ReaderRepository>();
+builder.Services.AddScoped<BookRepository>();
 builder.Services.AddTransient<TokenService>();
 
 var app = builder.Build();
