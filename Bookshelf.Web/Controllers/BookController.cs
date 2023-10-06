@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Bookshelf.Web.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshelf.Web.Controllers
 {
     public class BookController : Controller
     {
-        public IActionResult Index([FromQuery] string query)
+        public async Task<IActionResult> Index([FromQuery] string query,
+            [FromServices] BookService bookService)
         {
-            ViewData["Title"] = query;
-            return View();
+            var books = await bookService.SearchBooksAsync(query);
+            
+            return View(books);
         }
     }
 }

@@ -10,18 +10,22 @@
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label">Nome:</label>
                             <input asp-for="Name" type="text" class="form-control" placeholder="Digite seu nome">
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label asp-for="UserName" class="form-label">Nome de Usuário:</label>
                             <input asp-for="UserName" type="text" class="form-control" placeholder="Digite seu nome de usuário">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label">E-mail:</label>
                             <input asp-for="Email" type="email" class="form-control" placeholder="Digite seu e-mail">
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
                             <label asp-for="Password" class="form-label">Senha:</label>
                             <input asp-for="Password" type="password" class="form-control" id="senha" placeholder="Digite sua senha">
+                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         <button type="submit" class="btn btn-primary">Registrar</button>
                     </form>
@@ -30,3 +34,10 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial"); 
+    }
+}

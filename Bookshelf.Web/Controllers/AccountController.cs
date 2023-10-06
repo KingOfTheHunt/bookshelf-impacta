@@ -61,7 +61,7 @@ namespace Bookshelf.Web.Controllers
 
             try
             {
-                var viewModel = await accountService.GetAccount(HttpContext.Session.GetString("userName"),
+                var viewModel = await accountService.GetAccountAsync(HttpContext.Session.GetString("userName"),
                     HttpContext.Session.GetString("token"));
                 return View(viewModel);
             }
@@ -112,6 +112,7 @@ namespace Bookshelf.Web.Controllers
             }
         }
 
+        [HttpGet]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

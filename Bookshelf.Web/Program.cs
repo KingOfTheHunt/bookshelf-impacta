@@ -8,7 +8,12 @@ Configuration.Api = builder.Configuration.GetValue<string>("Api");
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<BookService>();
 builder.Services.AddHttpClient<AccountService>(options =>
+{
+    options.BaseAddress = new Uri(Configuration.Api);
+});
+builder.Services.AddHttpClient<BookService>(options =>
 {
     options.BaseAddress = new Uri(Configuration.Api);
 });

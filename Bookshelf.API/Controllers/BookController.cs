@@ -4,14 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshelf.API.Controllers
 {
-    [Route("v1/books/")]
+    [Route("v1/book/")]
     public class BookController : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetBooks([FromServices] BookshelfDbContext context,
+        public async Task<IActionResult> GetBooks([FromQuery] string query, 
+            [FromServices] BookshelfDbContext context,
             [FromServices] BookRepository repository)
         {
-            var books = await repository.GetBooksAsync(context);
+            var books = await repository.GetBooksAsync(context, query);
 
             return Ok(books);
         }

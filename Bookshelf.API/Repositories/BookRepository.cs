@@ -9,14 +9,15 @@ namespace Bookshelf.API.Repositories;
 
 public class BookRepository
 {
-    public async Task<List<BookSearchViewModel>> GetBooksAsync([FromServices] BookshelfDbContext context)
+    public async Task<List<BookSearchViewModel>> GetBooksAsync([FromServices] BookshelfDbContext context, string query)
     {
         return await context.Books.Include(x => x.Authors)
             .Include(x => x.Genres)
             .AsSplitQuery()
-            .Where(x => x.Id == 2 || x.Id == 4 || x.Id == 6)
+            .Where(x => x.Title.Contains(query) || x.ISBN == query)
             .Select<Book, BookSearchViewModel>(x => new BookSearchViewModel
             {
+                Id = x.Id,
                 Title = x.Title,
                 Subtitle = x.Subtitle,
                 Authors = x.Authors.Select(y => y.Name).ToList(),

@@ -1,5 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Bookshelf.Web.ViewModels.Book.BookSearchViewModel>
 
+@foreach (var book in Model) {
+    <p>@Html.DisplayFor(item => book.Title)</p>
 }
-
-<h1>@ViewData["Title"]</h1>

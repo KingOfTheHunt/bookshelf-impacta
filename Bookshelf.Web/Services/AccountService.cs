@@ -14,7 +14,7 @@ public class AccountService
 
     public async Task CreateAccountAsync(CreateAccountViewModel viewModel)
     {
-        var response = await _httpClient.PostAsJsonAsync("/v1/account/sign-up", viewModel);
+        var response = await _httpClient.PostAsJsonAsync("v1/account/sign-up", viewModel);
         response.EnsureSuccessStatusCode();
     }
 
@@ -26,7 +26,7 @@ public class AccountService
         return await response.Content.ReadAsStringAsync();
     }
 
-    public async Task<ProfileAccountViewModel> GetAccount(string userName, string token)
+    public async Task<ProfileAccountViewModel> GetAccountAsync(string userName, string token)
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
             token);
