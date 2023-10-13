@@ -8,8 +8,9 @@ namespace Bookshelf.Web.Controllers
         public async Task<IActionResult> Index([FromQuery] string query,
             [FromServices] BookService bookService)
         {
+            ViewData["query"] = query;
             var books = await bookService.SearchBooksAsync(query);
-            
+
             return View(books);
         }
     }
