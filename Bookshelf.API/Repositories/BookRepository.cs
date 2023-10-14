@@ -29,7 +29,7 @@ public class BookRepository
         var result = await connection.QueryAsync<Book, Author, Genre, BookSearchViewModel>(
             sql, (book, author, genre) =>
             {
-                var searchedBook = searchedBooks.FirstOrDefault(x => x.Id ==  book.Id);
+                var searchedBook = searchedBooks.FirstOrDefault(x => x.Id == book.Id);
 
                 if (searchedBook == null)
                 {
@@ -48,7 +48,7 @@ public class BookRepository
                 {
                     if (searchedBook.Authors.Any(x => x == author.Name) == false)
                         searchedBook.Authors.Add(author.Name);
-                    
+
                     searchedBook.Genres.Add(genre.Name);
                 }
 
@@ -58,5 +58,62 @@ public class BookRepository
             splitOn: "Name,Name");
 
         return searchedBooks;
+    }
+
+    public async Task<BookDetailsViewModel> GetBookDetailsAsync([FromServices] BookshelfDbContext context,
+        string isbn)
+    {
+        var connection = new SqlConnection(context.Database.GetConnectionString());
+
+        var sql = @"SELECT [Book].[Id], [Book].[Title], [Book].[Subtitle], [Book].[ISBN], 
+                    [Book].[Pages], [Book].[PublishingCompany], [Book].[Synopsis],
+                    [Author].[Name], [Genre].[Name] FROM [Book]
+                    INNER JOIN [BookAuthor] ON [BookAuthor].[BookId] = [Book].[Id]
+                    INNER JOIN [BookGenre] ON [BookGenre].[BookId] = [Book].[Id]
+                    INNER JOIN [Author] ON [Author].[Id] = [BookAuthor].[AuthorId]
+                    INNER JOIN [Genre] as [Genre] ON [Genre].[Id] = [BookGenre].[GenreId]
+                    WHERE [Book].[ISBN] = @isbn";
+
+        var books = new List<BookDetailsViewModel>();
+
+        var rows = await connection.QueryAsync<Book, Author, Genre, BookDetailsViewModel>(sql,
+            (book, author, genre) =>
+            {
+                var b = books.FirstOrDefault(x => x.Id == book.Id);
+
+                if (b == null)
+                {
+                    b = new()
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        Subtitle = book.Subtitle,
+                        ISBN = book.ISBN,
+                        Pages = book.Pages,
+                        PublishingCompany = book.PublishingCompany,
+                        Synopsis = book.Synopsis
+                    };
+
+                    b.Authors.Add(author.Name);
+                    b.Genres.Add(genre.Name);
+
+                    books.Add(b);
+                }
+                else
+                {
+                    if (b.Authors.Contains(author.Name) == false)
+                        b.Authors.Add(author.Name);
+
+                    b.Genres.Add(genre.Name);
+
+                    books.Add(b);
+                }
+
+                return b;
+            }
+            , new { isbn },
+            splitOn: "Name,Name");
+
+        return books.FirstOrDefault();
     }
 }
