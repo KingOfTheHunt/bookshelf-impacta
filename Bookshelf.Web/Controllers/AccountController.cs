@@ -1,4 +1,5 @@
-﻿using Bookshelf.Web.Services;
+﻿using Bookshelf.Web.Extensions;
+using Bookshelf.Web.Services;
 using Bookshelf.Web.ViewModels.Account;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,7 @@ namespace Bookshelf.Web.Controllers
     {
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("token") != null)
+            if (HttpContext.GetValueFromSession("token") != null)
                 return RedirectToAction(nameof(Index), "Home");
 
             return View();
@@ -21,8 +22,8 @@ namespace Bookshelf.Web.Controllers
             try
             {
                 var token = await accountService.LoginAsync(viewModel);
-                HttpContext.Session.SetString("token", token);
-                HttpContext.Session.SetString("userName", viewModel.Login);
+                HttpContext.SetValueInSession("token", token);
+                HttpContext.SetValueInSession("userName", viewModel.Login);
 
                 return RedirectToAction(nameof(Profile));
             }
@@ -56,13 +57,13 @@ namespace Bookshelf.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile([FromServices] AccountService accountService)
         {
-            if (HttpContext.Session.GetString("token") == null)
+            if (HttpContext.GetValueFromSession("token") == null)
                 return RedirectToAction(nameof(Index));
 
             try
             {
-                var viewModel = await accountService.GetAccountAsync(HttpContext.Session.GetString("userName"),
-                    HttpContext.Session.GetString("token"));
+                var viewModel = await accountService.GetAccountAsync(HttpContext.GetValueFromSession("userName"),
+                    HttpContext.GetValueFromSession("token"));
                 return View(viewModel);
             }
             catch (Exception)
@@ -78,7 +79,7 @@ namespace Bookshelf.Web.Controllers
             try
             {
                 var result = await accountService.DeleteAccountAsync(userName,
-                    HttpContext.Session.GetString("token"));
+                    HttpContext.GetValueFromSession("token"));
                 HttpContext.Session.Clear();
 
                 return RedirectToAction(nameof(Index), "Home");
@@ -100,9 +101,9 @@ namespace Bookshelf.Web.Controllers
         {
             try
             {
-                viewModel.UserName = HttpContext.Session.GetString("userName");
+                viewModel.UserName = HttpContext.GetValueFromSession("userName");
                 await accountService.UpdatePasswordAsync(viewModel, viewModel.UserName,
-                    HttpContext.Session.GetString("token"));
+                    HttpContext.GetValueFromSession("token"));
 
                 return RedirectToAction(nameof(Profile));
             }
@@ -115,7 +116,7 @@ namespace Bookshelf.Web.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
+            HttpContext.ClearSession();
 
             return RedirectToAction(nameof(Index), "Home");
         }
