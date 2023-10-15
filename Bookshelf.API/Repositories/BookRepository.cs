@@ -61,7 +61,7 @@ public class BookRepository
     }
 
     public async Task<BookDetailsViewModel> GetBookDetailsAsync([FromServices] BookshelfDbContext context,
-        string isbn)
+        int id)
     {
         var connection = new SqlConnection(context.Database.GetConnectionString());
 
@@ -72,7 +72,7 @@ public class BookRepository
                     INNER JOIN [BookGenre] ON [BookGenre].[BookId] = [Book].[Id]
                     INNER JOIN [Author] ON [Author].[Id] = [BookAuthor].[AuthorId]
                     INNER JOIN [Genre] as [Genre] ON [Genre].[Id] = [BookGenre].[GenreId]
-                    WHERE [Book].[ISBN] = @isbn";
+                    WHERE [Book].[Id] = @id";
 
         var books = new List<BookDetailsViewModel>();
 
@@ -111,7 +111,7 @@ public class BookRepository
 
                 return b;
             }
-            , new { isbn },
+            , new { id },
             splitOn: "Name,Name");
 
         return books.FirstOrDefault();

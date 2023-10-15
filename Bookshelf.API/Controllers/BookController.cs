@@ -1,6 +1,5 @@
 ﻿using Bookshelf.API.Data;
 using Bookshelf.API.Repositories;
-using Bookshelf.API.ViewModels.Book;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bookshelf.API.Controllers
@@ -18,12 +17,12 @@ namespace Bookshelf.API.Controllers
             return Ok(books);
         }
 
-        [HttpGet("{isbn}")]
-        public async Task<IActionResult> GetBookDetails([FromRoute] string isbn,
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetBookDetails([FromRoute] int id,
             [FromServices] BookshelfDbContext context,
             [FromServices] BookRepository repository)
         {
-            var book = await repository.GetBookDetailsAsync(context, isbn);
+            var book = await repository.GetBookDetailsAsync(context, id);
 
             if (book == null)
                 return NotFound();
