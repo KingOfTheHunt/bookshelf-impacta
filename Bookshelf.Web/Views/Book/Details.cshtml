@@ -1,0 +1,83 @@
+﻿@model Bookshelf.Web.ViewModels.Book.BookDetailsViewModel;
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 d-flex justify-content-center align-items-center">
+            <div>
+                <h1>Detalhes do livro</h1>
+                <dl>
+                    <dt class="col-md-3">
+                        <strong>Título:</strong>
+                    </dt>
+                    <dd class="col-md-9">
+                        @Model.Title
+                    </dd>
+                    <dt class="col-md-3">
+                        <strong>Subtítulo:</strong>
+                    </dt>
+                    <dd class="col-md-9">
+                        @Model.Subtitle
+                    </dd>
+                    <dt class="col-md-3">
+                        <strong>ISBN:</strong>
+                    </dt>
+                    <dd class="col-md-9">
+                        @Model.ISBN
+                    </dd>
+                    <dt class="col-md-3">
+                        <strong>Páginas:</strong>
+                    </dt>
+                    <dd class="col-md-9">
+                        @Model.Pages
+                    </dd>
+                    <dt class="col-md-3">
+                        <strong>Editora:</strong>
+                    </dt>
+                    <dd class="col-md-9">
+                        @Model.PublishingCompany
+                    </dd>
+                    <dt class="col-md-3">
+                        <strong>Sinopse:</strong>
+                    </dt>
+                    <dd class="col-md-9">
+                        <p style="text-align: justify">@Model.Synopsis</p>
+                    </dd>
+                    <dt class="col-md-3">
+                        <strong>Autor(es):</strong>
+                    </dt>
+                    <dd class="col-md-9">
+                        @if (Model.Authors.Count > 1)
+                        {
+                            @for (int x = 0; x < Model.Authors.Count - 1; x++)
+                            {
+                                @Html.DisplayFor(model => Model.Authors[x])<span>,</span>
+                            }
+                            @Html.DisplayFor(model => Model.Authors[Model.Authors.Count - 1])
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(model => Model.Authors[0])
+                        }
+                    </dd>
+                    <dt class="col-md-3">
+                        <strong>Gênero(s):</strong>
+                    </dt>
+                    <dd class="col-md-9">
+                        @if (Model.Genres.Count > 1)
+                        {
+                            @for (int x = 0; x < Model.Genres.Count - 1; x++)
+                            {
+                                @Html.DisplayFor(model => Model.Genres[x])<span>,</span>
+                            }
+                            @Html.DisplayFor(model => Model.Genres[Model.Genres.Count - 1])
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(model => Model.Genres[0])
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

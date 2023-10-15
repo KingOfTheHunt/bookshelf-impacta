@@ -18,5 +18,19 @@ namespace Bookshelf.Web.Services
 
             return books;
         }
+
+        public async Task<BookDetailsViewModel> GetBookDetailsAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"v1/book/{id}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var book = await response.Content.ReadFromJsonAsync<BookDetailsViewModel>();
+
+                return book;
+            }
+            
+            return null;
+        }
     }
 }
