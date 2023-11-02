@@ -32,6 +32,7 @@ namespace Bookshelf.API.Services
         {
             var claimsIdentity = new ClaimsIdentity();
             claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, reader.UserName));
+            claimsIdentity.AddClaim(new Claim("id", reader.Id.ToString()));
             claimsIdentity.AddClaim(new Claim("name_user", reader.Name));
             claimsIdentity.AddClaim(new Claim("user_image", reader.Image));
 
