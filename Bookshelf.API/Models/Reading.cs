@@ -8,7 +8,9 @@ public class Reading
 {
     public int Id { get; set; }
     public Book Book { get; set; }
+    public int BookId { get; set; }
     public Reader Reader { get; set; }
+    public int ReaderId { get; set; }
     public short PagesRead { get; set; }
     public EReadingStatus ReadingStatus { get; set; }
     public short Rate { get; set; }
