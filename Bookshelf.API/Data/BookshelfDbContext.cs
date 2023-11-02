@@ -22,5 +22,6 @@ public class BookshelfDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new BookMap());
+        modelBuilder.ApplyConfiguration(new ReadingMap());
     }
 }
