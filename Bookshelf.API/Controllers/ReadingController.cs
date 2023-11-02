@@ -22,13 +22,40 @@ public class ReadingController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("{readerId:int}")]
+    [HttpGet]
     public async Task<IActionResult> GetReadings([FromServices] BookshelfDbContext context,
         [FromServices] ReadingRepository repository,
         [FromRoute] int readerId)
     {
-        var readings = await repository.GetReadingsAsync(context, readerId);
+        var readings = await repository.GetReadingsAsync(context, int.Parse(User.FindFirstValue("id")));
 
         return Ok(readings);
+    }
+
+    [Authorize]
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateReadingAsync([FromServices] BookshelfDbContext context,
+        [FromServices] ReadingRepository repository,
+        [FromBody] UpdateReadingViewModel viewModel)
+    {
+        var result = await repository.UpdateReadingAsync(context, viewModel);
+
+        if (result == false)
+            return BadRequest(new { message = "Não foi possível atualizar a leitura!" });
+
+        return NoContent();
+    }
+
+    [Authorize]
+    [HttpDelete("delete/{readingId:int}")]
+    public async Task<IActionResult> DeleteReadingAsync([FromServices] BookshelfDbContext context,
+        [FromServices] ReadingRepository repository,
+        [FromRoute] int readingId)
+    {
+        var result = await repository.DeleteReadingAsync(context, readingId);
+
+        if (result == false) return BadRequest(new { message = "Não foi possível deletar a leitura!" });
+
+        return NoContent();
     }
 }

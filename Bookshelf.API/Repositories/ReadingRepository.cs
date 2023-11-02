@@ -62,4 +62,32 @@ public class ReadingRepository
 
         return readings;
     }
+
+    public async Task<bool> UpdateReadingAsync([FromServices] BookshelfDbContext context,
+        UpdateReadingViewModel viewModel)
+    {
+        var reading = await context.Readings.FirstOrDefaultAsync(x => x.Id == viewModel.Id);
+
+        if (reading == null) return false;
+
+        reading.PagesRead = viewModel.PagesRead;
+        reading.ReadingStatus = viewModel.ReadingStatus;
+        context.Readings.Update(reading);
+        await context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> DeleteReadingAsync([FromServices] BookshelfDbContext context, 
+        int readingId)
+    {
+        var reading = await context.Readings.FirstOrDefaultAsync(x => x.Id == readingId);
+
+        if (reading == null) return false;
+
+        context.Readings.Remove(reading);
+        await context.SaveChangesAsync();
+
+        return true;
+    }
 }
