@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Bookshelf.Web.ViewModels.Reading.ShowReadingsViewModel>;
+
+<h1>Lista de leituras</h1>
+
+<div class="d-flex justify-content-around">
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <h5 class="card-title">@item.Title</h5>
+            <p>Páginas lidas: @item.PagesRead</p>
+        </div>
+    }
+</div>

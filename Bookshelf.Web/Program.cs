@@ -17,6 +17,10 @@ builder.Services.AddHttpClient<BookService>(options =>
 {
     options.BaseAddress = new Uri(Configuration.Api);
 });
+builder.Services.AddHttpClient<ReadingService>(options =>
+{
+    options.BaseAddress = new Uri(Configuration.Api);
+});
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
