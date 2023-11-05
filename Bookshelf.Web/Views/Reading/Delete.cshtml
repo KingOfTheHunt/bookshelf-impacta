@@ -1,0 +1,11 @@
+﻿@model Bookshelf.Web.ViewModels.Reading.ReadingDetailsViewModel;
+
+
+<h2>Deseja realmete deletar @Model.Title da sua lista de leitura?</h2>
+<form asp-action="Delete" method="post">
+    <input asp-for="@Model.Id" hidden />
+    <p>
+        <button type="submit" class="btn btn-danger">Deletar</button>
+        <a class="btn btn-primary" asp-action="Index">Voltar</a>
+    </p>
+</form>

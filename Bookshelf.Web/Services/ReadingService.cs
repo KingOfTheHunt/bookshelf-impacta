@@ -60,6 +60,18 @@ public class ReadingService
         return false;
     }
 
+    public async Task<bool> DeleteReadingAsync(string token, int readingId)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = SetAuthorization(token);
+
+        var response = await _httpClient.DeleteAsync($"/v1/reading/delete/{readingId}");
+
+        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+            return true;
+
+        return false;
+    }
+
     private AuthenticationHeaderValue SetAuthorization(string token)
     {
         return new AuthenticationHeaderValue("Bearer", token);

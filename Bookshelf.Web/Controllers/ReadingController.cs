@@ -68,5 +68,28 @@ namespace Bookshelf.Web.Controllers
 
             return BadRequest("Não foi possível atualizar a leitura!");
         }
+
+        [HttpGet("/Delete/{id:int}")]
+        public async Task<IActionResult> Delete([FromServices] ReadingService readingService,
+            [FromRoute] int id)
+        {
+            var reading = await readingService.GetReadingAsync(HttpContext.GetValueFromSession("token"),
+                id);
+
+            return View(reading);
+        }
+
+        [HttpPost("/Delete/{id:int}")]
+        public async Task<IActionResult> Delete([FromServices] ReadingService readingService,
+            [FromForm] ReadingDetailsViewModel viewModel)
+        {
+            var result = await readingService.DeleteReadingAsync(HttpContext.GetValueFromSession("token"),
+                viewModel.Id);
+
+            if (result == true)
+                return RedirectToAction(nameof(Index));
+
+            return BadRequest("Não foi possível deletar a leitura!");
+        }
     }
 }
