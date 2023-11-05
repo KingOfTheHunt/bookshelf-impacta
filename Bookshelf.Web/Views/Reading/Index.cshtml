@@ -2,14 +2,28 @@
 
 <h1>Lista de leitura</h1>
 
-<div class="row">
-    <div class="d-flex justify-content-around">
-        @foreach (var item in Model)
-        {
-            <div class="card" style="width: 300px">
-                <h5 class="card-title">@item.Title</h5>
-                <p>Páginas lidas: @item.PagesRead / @item.Pages</p>
-            </div>
-        }
+@if (Model.Count() > 0)
+{
+    <div class="row">
+        <div class="d-flex justify-content-around">
+            @foreach (var item in Model)
+            {
+                <div class="card">
+                    <h5 class="card-title">@item.Title</h5>
+                    <p>Páginas lidas: @item.PagesRead / @item.Pages</p>
+                    <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-outline-primary">
+                        Atualizar leitura
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">
+                        Deletar leitura
+                    </a>
+                </div>
+            }
+        </div>
     </div>
-</div>
+}
+else
+{
+    <h1 class="text-warning">Não há livros na sua lista.</h1>
+}
+

@@ -36,6 +36,30 @@ public class ReadingService
         return false;
     }
 
+    public async Task<ReadingDetailsViewModel> GetReadingAsync(string token, int readingId)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = SetAuthorization(token);
+
+        var response = await _httpClient.GetAsync($"v1/reading/get-reading/{readingId}");
+        response.EnsureSuccessStatusCode();
+
+        var reading = await response.Content.ReadFromJsonAsync<ReadingDetailsViewModel>();
+
+        return reading;
+    }
+
+    public async Task<bool> UpdateReadingAsync(string token, UpdateReadingViewModel viewModel)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = SetAuthorization(token);
+
+        var response = await _httpClient.PutAsJsonAsync("/v1/reading/update", viewModel);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+            return true;
+
+        return false;
+    }
+
     private AuthenticationHeaderValue SetAuthorization(string token)
     {
         return new AuthenticationHeaderValue("Bearer", token);

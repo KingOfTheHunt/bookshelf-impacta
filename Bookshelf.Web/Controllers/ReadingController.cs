@@ -38,5 +38,35 @@ namespace Bookshelf.Web.Controllers
             else
                 return BadRequest("Não foi possível adicionar uma nova leitura");
         }
+
+        [HttpGet("/Update/{id:int}")]
+        public async Task<IActionResult> Update([FromServices] ReadingService readingService,
+            [FromRoute] int id)
+        {
+            var reading = await readingService.GetReadingAsync(HttpContext.GetValueFromSession("token"),
+                id);
+
+            return View(reading);
+        }
+
+        [HttpPost("/Update/{id:int}")]
+        public async Task<IActionResult> Update([FromServices] ReadingService readingService,
+            [FromForm] ReadingDetailsViewModel viewModel)
+        {
+            var updateViewModel = new UpdateReadingViewModel
+            {
+                Id = viewModel.Id,
+                PagesRead = viewModel.PagesRead,
+                ReadingStatus = viewModel.ReadingStatus
+            };
+
+            var result = await readingService.UpdateReadingAsync(HttpContext.GetValueFromSession("token"),
+                updateViewModel);
+
+            if (result == true)
+                return RedirectToAction(nameof(Index));
+
+            return BadRequest("Não foi possível atualizar a leitura!");
+        }
     }
 }

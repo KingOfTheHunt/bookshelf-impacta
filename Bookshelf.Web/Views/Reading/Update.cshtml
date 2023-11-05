@@ -1,0 +1,31 @@
+﻿@model Bookshelf.Web.ViewModels.Reading.ReadingDetailsViewModel;
+
+<h1>Atualizar os dados da leitura</h1>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Atualização</h2>
+                    <form asp-action="Update">
+                        <input asp-for="@Model.Id" type="number" hidden />
+                        <p>
+                            <label class="form-label" asp-for="PagesRead">Páginas lidas:</label>
+                            <input asp-for="PagesRead" type="number" min="0" max="@Model.Pages" />
+                        </p>
+                        <p>
+                            <label class="form-label" asp-for="ReadingStatus">Status da leitura:</label>
+                            <select asp-for="ReadingStatus" class="form-select">
+                                <option value="0" selected>Não lido</option>
+                                <option value="1">Lendo</option>
+                                <option value="2">Deseja ler</option>
+                            </select>
+                        </p>
+                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
