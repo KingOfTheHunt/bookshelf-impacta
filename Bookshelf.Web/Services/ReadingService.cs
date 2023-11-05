@@ -24,6 +24,18 @@ public class ReadingService
         return readings;
     }
 
+    public async Task<bool> AddReadingAsync(string token, AddReadingViewModel viewModel)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = SetAuthorization(token);
+
+        var response = await _httpClient.PostAsJsonAsync($"v1/reading/new", viewModel);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Created)
+            return true;
+
+        return false;
+    }
+
     private AuthenticationHeaderValue SetAuthorization(string token)
     {
         return new AuthenticationHeaderValue("Bearer", token);

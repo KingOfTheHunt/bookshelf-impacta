@@ -47,6 +47,8 @@ else
                             </div>
                         </li>
                         <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                        <a class="btn btn-secondary" asp-controller="Reading" asp-action="AddReading"
+                           asp-route-bookId="@item.Id">Adicionar a lista</a>
                     }
                 </ul>
             </div>

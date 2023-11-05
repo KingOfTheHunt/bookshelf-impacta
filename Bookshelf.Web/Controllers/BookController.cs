@@ -15,7 +15,7 @@ namespace Bookshelf.Web.Controllers
             return View(books);
         }
 
-        [HttpGet("/{id:int}")]
+        [HttpGet("/Details/{id:int}")]
         public async Task<IActionResult> Details([FromRoute] int id,
             [FromServices] BookService bookService)
         {
