@@ -35,7 +35,8 @@ public class ReadingRepository
         var readings = new List<ShowReadingsViewModel>();
 
         using var connection = new SqlConnection(context.Database.GetConnectionString());
-        var sql = @"SELECT [Reading].[Id], [Reading].[PagesRead], [Book].[Title] FROM [Reading]
+        var sql = @"SELECT [Reading].[Id], [Reading].[PagesRead], [Book].[Title], [Book].[Pages] 
+                    FROM [Reading]
                     INNER JOIN [Book] ON [Book].[Id] = [Reading].[BookId]
                     INNER JOIN [Reader] ON [Reader].[Id] = [Reading].[ReaderId]
                     WHERE [Reader].[Id] = @id";
@@ -51,7 +52,8 @@ public class ReadingRepository
                     {
                         Id = r.Id,
                         PagesRead = r.PagesRead,
-                        Title = b.Title
+                        Title = b.Title,
+                        Pages = b.Pages
                     };
 
                     readings.Add(reading);
