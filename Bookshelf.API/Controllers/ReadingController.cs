@@ -33,6 +33,20 @@ public class ReadingController : ControllerBase
     }
 
     [Authorize]
+    [HttpGet("get-reading/{readingId:int}")]
+    public async Task<IActionResult> GetReadingAsync([FromServices] BookshelfDbContext context,
+        [FromServices] ReadingRepository repository,
+        [FromRoute] int readingId)
+    {
+        var reading = await repository.GetReadingAsync(context, readingId);
+
+        if (reading == null)
+            return NotFound();
+
+        return Ok(reading);
+    }
+
+    [Authorize]
     [HttpPut("update")]
     public async Task<IActionResult> UpdateReadingAsync([FromServices] BookshelfDbContext context,
         [FromServices] ReadingRepository repository,

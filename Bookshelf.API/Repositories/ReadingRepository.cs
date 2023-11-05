@@ -65,6 +65,24 @@ public class ReadingRepository
         return readings;
     }
 
+    public async Task<ReadingDetailsViewModel> GetReadingAsync([FromServices] BookshelfDbContext context,
+        int readingId)
+    {
+        var reading = await context.Readings
+            .Include(x => x.Book)
+            .Where(x => x.Id == readingId)
+            .Select<Reading, ReadingDetailsViewModel>(x => new ReadingDetailsViewModel
+            {
+                Id = x.Id,
+                Title = x.Book.Title,
+                Pages = x.Book.Pages,
+                PagesRead = x.PagesRead,
+                ReadingStatus = x.ReadingStatus
+            }).FirstOrDefaultAsync();
+
+        return reading;
+    }
+
     public async Task<bool> UpdateReadingAsync([FromServices] BookshelfDbContext context,
         UpdateReadingViewModel viewModel)
     {
