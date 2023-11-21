@@ -76,6 +76,12 @@
                             @Html.DisplayFor(model => Model.Genres[0])
                         }
                     </dd>
+                    <dt class="col-md-3">
+                        <strong>Avaliação:</strong>
+                    </dt>
+                    <dd class="col-md-9">
+                        <p style="text-align: justify">@Model.Rate / 5</p>
+                    </dd>
                 </dl>
                 <a class="btn btn-primary" asp-controller="Reading" asp-action="AddReading"
                    asp-route-bookId="@Model.Id">Adicionar a lista</a>

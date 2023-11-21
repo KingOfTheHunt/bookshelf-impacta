@@ -11,4 +11,5 @@ public class BookDetailsViewModel
     public string Synopsis { get; init; }
     public List<string> Authors { get; init; } = new();
     public List<string> Genres { get; init; } = new();
+    public int Rate { get; set; }
 }
