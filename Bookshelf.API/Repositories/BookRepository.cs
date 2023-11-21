@@ -114,6 +114,11 @@ public class BookRepository
             , new { id },
             splitOn: "Name,Name");
 
+        if (books.Count > 0)
+        {
+            var book = books.FirstOrDefault();
+            book.Rate = (int) await context.Readings.Where(x => x.BookId == book.Id).AverageAsync(x => x.Rate);
+        }
         return books.FirstOrDefault();
     }
 }
