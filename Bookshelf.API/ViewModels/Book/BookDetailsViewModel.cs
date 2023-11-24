@@ -12,4 +12,11 @@ public class BookDetailsViewModel
     public List<string> Authors { get; } = new();
     public List<string> Genres { get; } = new();
     public int Rate { get; set; }
+    public List<Review> Reviews { get; set; } = new();
+}
+
+public class Review
+{
+    public string Reader { get; set; }
+    public string Content { get; set; }
 }

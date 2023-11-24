@@ -117,8 +117,17 @@ public class BookRepository
         if (books.Count > 0)
         {
             var book = books.FirstOrDefault();
-            book.Rate = (int) await context.Readings.Where(x => x.BookId == book.Id).AverageAsync(x => x.Rate);
+            book.Rate = (int)await context.Readings.Where(x => x.BookId == book.Id).AverageAsync(x => x.Rate);
+            book.Reviews = await context.Readings.Include(x => x.Reader)
+                .Where(x => x.BookId == id)
+                .Select<Reading, Review>(x => new Review
+                {
+                    Reader = x.Reader.Name,
+                    Content = x.Review
+                })
+                .ToListAsync();
         }
+
         return books.FirstOrDefault();
     }
 }
