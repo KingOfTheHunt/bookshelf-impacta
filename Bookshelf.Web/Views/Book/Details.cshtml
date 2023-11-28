@@ -50,7 +50,9 @@
                         {
                             @for (int x = 0; x < Model.Authors.Count - 1; x++)
                             {
-                                @Html.DisplayFor(model => Model.Authors[x])<span>,</span>
+                                @Html.DisplayFor(model => Model.Authors[x])
+
+                                <span>,</span>
                             }
                             @Html.DisplayFor(model => Model.Authors[Model.Authors.Count - 1])
                         }
@@ -67,7 +69,9 @@
                         {
                             @for (int x = 0; x < Model.Genres.Count - 1; x++)
                             {
-                                @Html.DisplayFor(model => Model.Genres[x])<span>,</span>
+                                @Html.DisplayFor(model => Model.Genres[x])
+
+                                <span>,</span>
                             }
                             @Html.DisplayFor(model => Model.Genres[Model.Genres.Count - 1])
                         }
@@ -85,6 +89,25 @@
                 </dl>
                 <a class="btn btn-primary" asp-controller="Reading" asp-action="AddReading"
                    asp-route-bookId="@Model.Id">Adicionar a lista</a>
+
+                <br />
+
+                <h2>Reviews dos leitores</h2>
+                @if (Model.Reviews.Count > 0)
+                {
+                    foreach (var item in Model.Reviews)
+                    {
+                        if (item.Content is not null)
+                        {
+                            <div>
+                                <p>
+                                    <strong>@Html.DisplayFor(modelItem => item.Reader)</strong> <br />
+                                    @Html.DisplayFor(modelItem => item.Content)
+                                </p>
+                            </div>
+                        }
+                    }
+                }
             </div>
         </div>
     </div>
