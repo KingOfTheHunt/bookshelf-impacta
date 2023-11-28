@@ -77,7 +77,9 @@ public class ReadingRepository
                 Title = x.Book.Title,
                 Pages = x.Book.Pages,
                 PagesRead = x.PagesRead,
-                ReadingStatus = x.ReadingStatus
+                ReadingStatus = x.ReadingStatus,
+                Rate = x.Rate,
+                Review = x.Review
             }).FirstOrDefaultAsync();
 
         return reading;
@@ -92,6 +94,8 @@ public class ReadingRepository
 
         reading.PagesRead = viewModel.PagesRead;
         reading.ReadingStatus = viewModel.ReadingStatus;
+        reading.Rate = viewModel.Rate;
+        reading.Review = viewModel.Review;
         context.Readings.Update(reading);
         await context.SaveChangesAsync();
 

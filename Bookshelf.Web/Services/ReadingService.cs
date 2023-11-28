@@ -36,14 +36,14 @@ public class ReadingService
         return false;
     }
 
-    public async Task<ReadingDetailsViewModel> GetReadingAsync(string token, int readingId)
+    public async Task<DetailsReadingViewModel> GetReadingAsync(string token, int readingId)
     {
         _httpClient.DefaultRequestHeaders.Authorization = SetAuthorization(token);
 
         var response = await _httpClient.GetAsync($"v1/reading/get-reading/{readingId}");
         response.EnsureSuccessStatusCode();
 
-        var reading = await response.Content.ReadFromJsonAsync<ReadingDetailsViewModel>();
+        var reading = await response.Content.ReadFromJsonAsync<DetailsReadingViewModel>();
 
         return reading;
     }

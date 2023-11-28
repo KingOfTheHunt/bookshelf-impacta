@@ -51,13 +51,15 @@ namespace Bookshelf.Web.Controllers
 
         [HttpPost("/Update/{id:int}")]
         public async Task<IActionResult> Update([FromServices] ReadingService readingService,
-            [FromForm] ReadingDetailsViewModel viewModel)
+            [FromForm] DetailsReadingViewModel viewModel)
         {
             var updateViewModel = new UpdateReadingViewModel
             {
                 Id = viewModel.Id,
                 PagesRead = viewModel.PagesRead,
-                ReadingStatus = viewModel.ReadingStatus
+                ReadingStatus = viewModel.ReadingStatus,
+                Rate = viewModel.Rate,
+                Review = viewModel.Review
             };
 
             var result = await readingService.UpdateReadingAsync(HttpContext.GetValueFromSession("token"),
@@ -81,7 +83,7 @@ namespace Bookshelf.Web.Controllers
 
         [HttpPost("/Delete/{id:int}")]
         public async Task<IActionResult> Delete([FromServices] ReadingService readingService,
-            [FromForm] ReadingDetailsViewModel viewModel)
+            [FromForm] DetailsReadingViewModel viewModel)
         {
             var result = await readingService.DeleteReadingAsync(HttpContext.GetValueFromSession("token"),
                 viewModel.Id);
